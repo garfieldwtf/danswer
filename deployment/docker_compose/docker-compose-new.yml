@@ -312,6 +312,12 @@ services:
       - DOMAIN=localhost
     volumes:
       - ../data/nginx:/etc/nginx/conf.d
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dcms.tls=true"
+      - "traefik.http.routers.dcms.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dcms.rule=Host(`danswer.garf.us`)"
+      - "traefik.http.routers.dcms.entrypoints=web,websecure"
     logging:
       driver: json-file
       options:
