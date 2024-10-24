@@ -14,11 +14,11 @@ services:
       - cache
       - inference_model_server
     restart: always
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
     environment:
       # Auth Settings
-      - AUTH_TYPE=${AUTH_TYPE:-disabled}
+      - AUTH_TYPE=${AUTH_TYPE:-BASIC}
       - SESSION_EXPIRE_TIME_SECONDS=${SESSION_EXPIRE_TIME_SECONDS:-}
       - ENCRYPTION_KEY_SECRET=${ENCRYPTION_KEY_SECRET:-}
       - VALID_EMAIL_DOMAINS=${VALID_EMAIL_DOMAINS:-}
@@ -101,6 +101,13 @@ services:
       - ENABLE_PAID_ENTERPRISE_EDITION_FEATURES=${ENABLE_PAID_ENTERPRISE_EDITION_FEATURES:-false}
       - API_KEY_HASH_ROUNDS=${API_KEY_HASH_ROUNDS:-}
       # Seeding configuration
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dcms.tls=true"
+      - "traefik.http.routers.dcms.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dcms.rule=Host(`api.danswer.garf.us`)"
+      - "traefik.http.routers.dcms.entrypoints=web,websecure"      
+      
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -344,9 +351,15 @@ services:
       - web_server
     environment:
       - DOMAIN=localhost
-    ports:
-      - "80:80"
-      - "3000:80" # allow for localhost:3000 usage, since that is the norm
+#    ports:
+#      - "80:80"
+#      - "3000:80" # allow for localhost:3000 usage, since that is the norm
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dcms.tls=true"
+      - "traefik.http.routers.dcms.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dcms.rule=Host(`danswer.garf.us`)"
+      - "traefik.http.routers.dcms.entrypoints=web,websecure"
     volumes:
       - ../data/nginx:/etc/nginx/conf.d
     logging:
@@ -366,8 +379,8 @@ services:
   cache:
     image: redis:7.4-alpine
     restart: always
-    ports:
-      - '6379:6379'
+ #   ports:
+ #     - '6379:6379'
     # docker silently mounts /data even without an explicit volume mount, which enables
     # persistence. explicitly setting save and appendonly forces ephemeral behavior.
     command: redis-server --save "" --appendonly no
