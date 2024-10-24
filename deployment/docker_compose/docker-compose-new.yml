@@ -83,11 +83,11 @@ services:
       - ENABLE_PAID_ENTERPRISE_EDITION_FEATURES=${ENABLE_PAID_ENTERPRISE_EDITION_FEATURES:-false}
       - API_KEY_HASH_ROUNDS=${API_KEY_HASH_ROUNDS:-}
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dcms.tls=true"
-      - "traefik.http.routers.dcms.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.dcms.rule=Host(`api.danswer.garf.us`)"
-      - "traefik.http.routers.dcms.entrypoints=web,websecure"
+      - traefik.enable:true
+      - traefik.http.routers.dcms.tls:true
+      - traefik.http.routers.dcms.tls.certresolver:letsencrypt
+      - traefik.http.routers.dcms.rule:Host(`api.danswer.garf.us`)
+      - traefik.http.routers.dcms.entrypoints:web,websecure
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -313,11 +313,11 @@ services:
     volumes:
       - ../data/nginx:/etc/nginx/conf.d
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dcms.tls=true"
-      - "traefik.http.routers.dcms.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.dcms.rule=Host(`danswer.garf.us`)"
-      - "traefik.http.routers.dcms.entrypoints=web,websecure"
+      - traefik.enable:true
+      - traefik.http.routers.dcms.tls:true
+      - traefik.http.routers.dcms.tls.certresolver:letsencrypt
+      - traefik.http.routers.dcms.rule:Host(`danswer.garf.us`)
+      - traefik.http.routers.dcms.entrypoints:web,websecure
     logging:
       driver: json-file
       options:
